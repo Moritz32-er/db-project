@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form method="get" action="/standings" class="row">
+  <div>
+    <label>Turnier</label><br />
+    <select name="tournament_id" required>
+      {% for t in tournaments %}
+        <option value="{{ t.tournament_id }}" {% if t.tournament_id == tournament_id %}selected{% endif %}>
+          {{ t.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <button type="submit">Tabelle anzeigen</button>
+  </div>
+</form>
+
+<h2>Rangliste</h2>
+<table>
+  <tr>
+    <th>#</th>
+    <th>Team</th>
+    <th>Spiele</th>
+    <th>Punkte</th>
+    <th>Tore</th>
+    <th>Gegentore</th>
+    <th>Diff</th>
+  </tr>
+  {% for row in standings %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ row.team_name }}</td>
+      <td>{{ row.games_played }}</td>
+      <td>{{ row.points }}</td>
+      <td>{{ row.goals_for }}</td>
+      <td>{{ row.goals_against }}</td>
+      <td>{{ row.goal_diff }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
