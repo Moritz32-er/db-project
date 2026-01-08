@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<p>
+  <b>Spiel:</b> {{ match.home_team_name }} vs {{ match.away_team_name }} (Runde {{ match.round_no }})
+</p>
+
+<form method="post" action="/matches/{{ match.match_id }}/result" class="row">
+  <div>
+    <label>{{ match.home_team_name }} Tore</label><br />
+    <input type="number" min="0" name="home_score" value="{{ match.home_score or 0 }}" required />
+  </div>
+  <div>
+    <label>{{ match.away_team_name }} Tore</label><br />
+    <input type="number" min="0" name="away_score" value="{{ match.away_score or 0 }}" required />
+  </div>
+  <div>
+    <button type="submit">Speichern</button>
+  </div>
+</form>
+
+{% endblock %}
