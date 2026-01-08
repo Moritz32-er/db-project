@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+  <div>
+    <a href="/teams/new"><button>+ Team hinzufügen</button></a>
+  </div>
+
+  <div>
+    <form method="post" action="/tournaments/new">
+      <input name="name" placeholder="Turniername (z.B. Schulturnier 2026)" required />
+      <button type="submit">Turnier erstellen</button>
+    </form>
+  </div>
+</div>
+
+<h2>Gespeicherte Teams</h2>
+<table>
+  <tr><th>ID</th><th>Name</th><th>Aktion</th></tr>
+  {% for team in teams %}
+    <tr>
+      <td>{{ team.team_id }}</td>
+      <td>{{ team.name }}</td>
+      <td>
+        <form method="post" action="/teams/{{ team.team_id }}/delete" onsubmit="return confirm('Team wirklich löschen?');">
+          <button type="submit">Löschen</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
