@@ -179,7 +179,62 @@ CREATE TABLE tabelle (
     siege INT DEFAULT 0,
     FOREIGN KEY (team_id) REFERENCES team(team_id)
 );
+CREATE VIEW v_spiele_teams AS
+SELECT
+    s.spiel_id,
+    ht.name AS heimteam,
+    at.name AS auswaertsteam,
+    s.tore_heimteam,
+    s.tore_auswaertsteam
+FROM spiel s
+JOIN team ht ON s.heimteam_id = ht.team_id
+JOIN team at ON s.auswaertsteam_id = at.team_id;
 
+CREATE VIEW v_spielplan AS
+SELECT
+    sp.spielplan_id,
+    b.begegnung_id,
+    ht.name AS heimteam,
+    at.name AS auswaertsteam
+FROM spielplan sp
+JOIN begegnung b ON sp.begegnung_id = b.begegnung_id
+JOIN team ht ON b.heimteam_id = ht.team_id
+JOIN team at ON b.auswaertsteam_id = at.team_id;
+
+CREATE VIEW v_tabelle AS
+SELECT
+    t.name AS team,
+    tab.gruppe_id,
+    tab.siege
+FROM tabelle tab
+JOIN team t ON tab.team_id = t.team_id
+ORDER BY tab.siege DESC;
+
+CREATE VIEW v_siege_berechnet AS
+SELECT
+    t.team_id,
+    t.name,
+    SUM(
+        CASE
+            WHEN s.heimteam_id = t.team_id
+                 AND s.tore_heimteam > s.tore_auswaertsteam THEN 1
+            WHEN s.auswaertsteam_id = t.team_id
+                 AND s.tore_auswaertsteam > s.tore_heimteam THEN 1
+            ELSE 0
+        END
+    ) AS siege
+FROM team t
+LEFT JOIN spiel s
+    ON t.team_id IN (s.heimteam_id, s.auswaertsteam_id)
+GROUP BY t.team_id, t.name;
+
+CREATE VIEW v_team_mitarbeiter AS
+SELECT
+    t.name AS team,
+    m.mitarbeiter_id
+FROM team_mitarbeiter tm
+JOIN team t ON tm.team_id = t.team_id
+JOIN mitarbeiter m ON tm.mitarbeiter_id = m.mitarbeiter_id;
 
 
 
