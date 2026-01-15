@@ -6,7 +6,7 @@ CREATE TABLE users (
 
 CREATE TABLE todos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id INT NOT NULL,j 
     content VARCHAR(100),
     due DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(id)
