@@ -130,5 +130,58 @@ def complete():
     db_write("DELETE FROM todos WHERE user_id=%s AND id=%s", (current_user.id, todo_id,))
     return redirect(url_for("index"))
 
+CREATE TABLE team (
+    team_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    trainer VARCHAR(100)
+);
+
+CREATE TABLE mitarbeiter (
+    mitarbeiter_id INT AUTO_INCREMENT PRIMARY KEY
+);
+
+CREATE TABLE team_mitarbeiter (
+    team_id INT,
+    mitarbeiter_id INT,
+    PRIMARY KEY (team_id, mitarbeiter_id),
+    FOREIGN KEY (team_id) REFERENCES team(team_id),
+    FOREIGN KEY (mitarbeiter_id) REFERENCES mitarbeiter(mitarbeiter_id)
+);
+
+CREATE TABLE spiel (
+    spiel_id INT AUTO_INCREMENT PRIMARY KEY,
+    heimteam_id INT NOT NULL,
+    auswaertsteam_id INT NOT NULL,
+    tore_heimteam INT DEFAULT 0,
+    tore_auswaertsteam INT DEFAULT 0,
+    FOREIGN KEY (heimteam_id) REFERENCES team(team_id),
+    FOREIGN KEY (auswaertsteam_id) REFERENCES team(team_id)
+);
+
+CREATE TABLE begegnung (
+    begegnung_id INT AUTO_INCREMENT PRIMARY KEY,
+    heimteam_id INT NOT NULL,
+    auswaertsteam_id INT NOT NULL,
+    FOREIGN KEY (heimteam_id) REFERENCES team(team_id),
+    FOREIGN KEY (auswaertsteam_id) REFERENCES team(team_id)
+);
+
+CREATE TABLE spielplan (
+    spielplan_id INT AUTO_INCREMENT PRIMARY KEY,
+    begegnung_id INT NOT NULL,
+    FOREIGN KEY (begegnung_id) REFERENCES begegnung(begegnung_id)
+);
+
+CREATE TABLE tabelle (
+    tabellen_id INT AUTO_INCREMENT PRIMARY KEY,
+    team_id INT UNIQUE NOT NULL,
+    gruppe_id INT,
+    siege INT DEFAULT 0,
+    FOREIGN KEY (team_id) REFERENCES team(team_id)
+);
+
+
+
+
 if __name__ == "__main__":
     app.run()
