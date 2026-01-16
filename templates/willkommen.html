@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Willkommen</title>
+</head>
+<body>
+    <h1>Willkommen {{ current_user.username }}</h1>
+
+    <h2>Letzte Spiele</h2>
+    <ul>
+        {% for s in letzte_spiele %}
+            <li>{{ s.heimteam }} {{ s.tore_heimteam }} : {{ s.tore_auswaertsteam }} {{ s.auswaertsteam }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
